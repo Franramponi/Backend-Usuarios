@@ -1,17 +1,12 @@
 const mongoose = require('mongoose');
+const modulo = require('./config/config.js');
 
-mongoose.connect('mongodb+srv://ramponifran:Le147123@cluster0.fxykmq2.mongodb.net/miapp?retryWrites=true&w=majority');
 
 const User = mongoose.model('User', {
     username: String,
     edad: Number,
 })
 
-const crear = async () =>{
-    const user = new User({username: 'usuario promedio', edad: 15})
-    const savedUser = await user.save()
-    console.log(savedUser)
-}
 
 // crear();
 const buscarTodo = async() =>{

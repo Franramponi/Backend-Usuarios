@@ -4,15 +4,29 @@ const bcrypt = require('bcrypt')
 const jwt = require ('jsonwebtoken')
 const { expressjwt: expressJwt } = require ('express-jwt')
 const User = require('./user')
-
-
-mongoose.connect('mongodb+srv://ramponifran:Le147123@cluster0.fxykmq2.mongodb.net/auth?retryWrites=true&w=majority')
+const modulo = require('../config/config.js');
+const DB_URI2 = modulo.DB_URI2;
+const port = 8080;
 
 const app= express()
 app.use(express.json())
 
-const validateJwt = expressJwt ({ secret:process.env.SECRET, algorithms: ['HS256'] })
-const signToken = _id => jwt.sign({_id}, process.env.SECRET)
+const uri =DB_URI2;
+
+mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true 
+  })
+  .then(() => {
+    console.log('Conexión exitosa a MongoDB');
+  })
+  .catch((error) => {
+    console.error('Error al conectar a MongoDB:', error);
+  });
+
+
+const validateJwt = expressJwt ({ secret:`chanchito`, algorithms: ['HS256'] })
+const signToken = _id => jwt.sign({_id}, `chanchito`)
 
 app.post('/register', async(req,res) =>{
     const {body} = req
@@ -81,6 +95,7 @@ app.use((err,req,res,next) =>{
     res.send('Ha ocurrido un error')
 })
 
-app.listen(3000, () => {
-    console.log('listening in port 3000')
-   })
+
+app.listen(port,()=>{
+    console.log('app inicializada')
+})

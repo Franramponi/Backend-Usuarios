@@ -2,10 +2,26 @@ const express = require('express');
 const mongoose = require('mongoose')
 const user = require('./user.controller')
 const app = express();
-const port = 3000;
-//endpoints
-app.use(express.json())
-mongoose.connect('mongodb+srv://ramponifran:Le147123@cluster0.fxykmq2.mongodb.net/miapp?retryWrites=true&w=majority');
+const port = 8080;
+const modulo = require('./config/config.js');
+const DB_URI = modulo.DB_URI;
+
+const uri = DB_URI;
+
+
+app.use(express.json());
+mongoose.connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true 
+  })
+  .then(() => {
+    console.log('Conexión exitosa a MongoDB');
+  })
+  .catch((error) => {
+    console.error('Error al conectar a MongoDB:', error);
+  });
+
+
 app.get('/users',user.list);
 app.post('/users', user.create)
 app.get('/users/:id', user.get);
